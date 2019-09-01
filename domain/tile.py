@@ -1,5 +1,9 @@
 from enum import Enum
 
+import colorama
+
+colorama.init()
+
 
 class Category(Enum):
     pass
@@ -30,6 +34,9 @@ class Tile:
     def __str__(self):
         return f'[{self.category}{self.number}]'
 
+    def color_string(self):
+        return self.__str__()
+
 
 class SimpleTile(Tile):
     def __init__(self, category: SimpleCategory, number: int):
@@ -37,6 +44,14 @@ class SimpleTile(Tile):
             super().__init__(category, str(number))
         else:
             raise AttributeError(f'invalid number for simple tile: {number}')
+
+    def color_string(self):
+        if self.category == SimpleCategory.Dot:
+            return colorama.Back.BLUE + self.__str__() + colorama.Style.RESET_ALL
+        elif self.category == SimpleCategory.Bamboo:
+            return colorama.Back.GREEN + self.__str__() + colorama.Style.RESET_ALL
+        else:
+            return colorama.Back.MAGENTA + self.__str__() + colorama.Style.RESET_ALL
 
 
 class HonorTile(Tile):
@@ -65,3 +80,9 @@ class HonorTile(Tile):
             return "[白 ]"
         else:
             raise AttributeError(f'invalid honor tile: {self.category},{self.number}')
+
+    def color_string(self):
+        if self.category == HonorCategory.Wind:
+            return colorama.Back.YELLOW + self.__str__() + colorama.Style.RESET_ALL
+        else:
+            return colorama.Back.CYAN + self.__str__() + colorama.Style.RESET_ALL
