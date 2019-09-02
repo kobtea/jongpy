@@ -2,8 +2,7 @@ from functools import reduce
 from typing import List
 
 from domain.table import Table
-from domain.tile import (HonorCategory, HonorTile, SimpleCategory, SimpleTile,
-                         Tile)
+from domain.tile import HonorCategory, HonorTile, SimpleCategory, SimpleTile, Tile
 
 
 class Player:
@@ -21,16 +20,16 @@ class Player:
             if tile.category in SimpleCategory:
                 self.hand[tile.category][int(tile.number) - 1] += 1
             elif tile.category == HonorCategory.Wind:
-                d = {"east": 0, "south": 1, "west": 2, "north": 3}
+                d = dict([(v, k) for k, v in enumerate(HonorCategory.wind_values())])
                 self.hand[tile.category][d[tile.number]] += 1
             elif tile.category == HonorCategory.Dragon:
-                d = {"red": 0, "green": 1, "white": 2}
+                d = dict([(v, k) for k, v in enumerate(HonorCategory.dragon_values())])
                 self.hand[tile.category][d[tile.number]] += 1
 
     def hand_to_list(self) -> List[Tile]:
         res = []
-        wind_dict = {0: "east", 1: "south", 2: "west", 3: "north"}
-        dragon_dict = {0: "red", 1: "green", 2: "white"}
+        wind_dict = dict(enumerate(HonorCategory.wind_values()))
+        dragon_dict = dict(enumerate(HonorCategory.dragon_values()))
         for cat, counts in self.hand.items():
             for no, count in enumerate(counts):
                 for _ in range(count):

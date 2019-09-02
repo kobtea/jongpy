@@ -25,6 +25,14 @@ class HonorCategory(Category):
     def __str__(self):
         return self.value
 
+    @staticmethod
+    def wind_values():
+        return ["east", "south", "west", "north"]
+
+    @staticmethod
+    def dragon_values():
+        return ["red", "green", "white"]
+
 
 class Tile:
     def __init__(self, category: Category, number: str):
@@ -56,9 +64,9 @@ class SimpleTile(Tile):
 
 class HonorTile(Tile):
     def __init__(self, name: str):
-        if name in ["east", "south", "west", "north"]:
+        if name in HonorCategory.wind_values():
             super().__init__(HonorCategory.Wind, name)
-        elif name in ["red", "green", "white"]:
+        elif name in HonorCategory.dragon_values():
             super().__init__(HonorCategory.Dragon, name)
         else:
             raise AttributeError(f"invalid name for honor tile: {name}")
