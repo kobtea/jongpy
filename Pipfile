@@ -5,6 +5,7 @@ verify_ssl = true
 
 [dev-packages]
 flake8 = "*"
+black = "*"
 
 [packages]
 colorama = "*"
@@ -13,4 +14,8 @@ colorama = "*"
 python_version = "3.7"
 
 [scripts]
-lint = "flake8 --ignore=E501 ."
+lint = "bash -c 'flake8 . && black --check .'"
+fix = "black ."
+
+[pipenv]
+allow_prereleases = true
