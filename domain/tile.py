@@ -1,4 +1,5 @@
 from enum import Enum
+from typing import Dict, List
 
 import colorama
 
@@ -94,3 +95,43 @@ class HonorTile(Tile):
             return colorama.Back.YELLOW + self.__str__() + colorama.Style.RESET_ALL
         else:
             return colorama.Back.CYAN + self.__str__() + colorama.Style.RESET_ALL
+
+
+def hand_from_tenhou_string(s: str) -> Dict[Category, List[int]]:
+    res = {
+        SimpleCategory.Dot: [0] * 9,
+        SimpleCategory.Bamboo: [0] * 9,
+        SimpleCategory.Character: [0] * 9,
+        HonorCategory.Wind: [0] * 4,
+        HonorCategory.Dragon: [0] * 3,
+    }
+    buf = []
+    for c in s:
+        # 0 means red 5. treat 0 as 5
+        if c in ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]:
+            buf.append(int(c))
+        elif c in ["p", "s", "m"]:
+            d = {
+                "p": SimpleCategory.Dot,
+                "s": SimpleCategory.Bamboo,
+                "m": SimpleCategory.Character,
+            }
+            for num in buf:
+                if num == 0:
+                    num = 5
+                res[d[c]][num - 1] += 1
+            buf = []
+        elif c == "z":
+            for num in buf:
+                if num - 4 <= 0:
+                    res[HonorCategory.Wind][num - 1] += 1
+                elif 1 <= num - 4 <= 3:
+                    res[HonorCategory.Dragon][num - 5] += 1
+                else:
+                    raise AttributeError(f"failed to parse string: {s}")
+            buf = []
+        else:
+            raise AttributeError(f"failed to parse string: {s}")
+        if len(buf) > 0:
+            raise AttributeError(f"failed to parse string: {s}")
+    return res
