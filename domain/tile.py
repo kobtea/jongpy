@@ -111,6 +111,8 @@ def hand_from_tenhou_string(s: str) -> Dict[Category, List[int]]:
         if c in ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]:
             buf.append(int(c))
         elif c in ["p", "s", "m"]:
+            if len(buf) == 0:
+                raise AttributeError(f"failed to parse string: {s}")
             d = {
                 "p": SimpleCategory.Dot,
                 "s": SimpleCategory.Bamboo,
@@ -122,6 +124,8 @@ def hand_from_tenhou_string(s: str) -> Dict[Category, List[int]]:
                 res[d[c]][num - 1] += 1
             buf = []
         elif c == "z":
+            if len(buf) == 0:
+                raise AttributeError(f"failed to parse string: {s}")
             for num in buf:
                 if num - 4 <= 0:
                     res[HonorCategory.Wind][num - 1] += 1
