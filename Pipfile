@@ -6,6 +6,8 @@ verify_ssl = true
 [dev-packages]
 flake8 = "*"
 black = "*"
+ipython = "*"
+isort = "*"
 
 [packages]
 colorama = "*"
@@ -14,8 +16,8 @@ colorama = "*"
 python_version = "3.7"
 
 [scripts]
-lint = "bash -c 'flake8 . && black --check .'"
-fix = "black ."
+lint = "bash -c 'flake8 . && black --check . && isort -rc -c -df .'"
+fix = "bash -c 'isort -rc . && black .'"
 
 [pipenv]
 allow_prereleases = true
