@@ -1,8 +1,14 @@
 from functools import reduce
 from typing import List
 
-from domain.table import Table
-from domain.tile import HonorCategory, HonorTile, SimpleCategory, SimpleTile, Tile
+from jongpy.domain.table import Table
+from jongpy.domain.tile import (
+    HonorCategory,
+    HonorTile,
+    SimpleCategory,
+    SimpleTile,
+    Tile,
+)
 
 
 class Player:
