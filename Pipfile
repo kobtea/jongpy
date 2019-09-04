@@ -16,7 +16,7 @@ colorama = "*"
 python_version = "3.7"
 
 [scripts]
-lint = "bash -c 'flake8 . && black --check . && isort -rc -c -df .'"
+lint = "bash -c 'flake8 . && black --check .'"
 fix = "bash -c 'isort -rc . && black .'"
 
 [pipenv]

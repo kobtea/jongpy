@@ -52,3 +52,21 @@ class Player:
 
     def hand_to_color_string(self):
         return reduce(lambda a, b: a + b.color_string(), self.hand_to_list(), "")
+
+    def shanten_13orphans(self) -> int:
+        """
+        calculate shanten for thirteen orphans (国士無双)
+        :return: int
+        """
+        res = 13
+        available_counts = []
+        for category, counts in self.hand.items():
+            if category in SimpleCategory:
+                available_counts.append(counts[0])
+                available_counts.append(counts[-1])
+            elif category in HonorCategory:
+                available_counts += counts
+        res -= len([i for i in available_counts if i >= 1])
+        if any([i == 2 for i in available_counts]):
+            res -= 1
+        return res
