@@ -136,6 +136,6 @@ def hand_from_tenhou_string(s: str) -> Dict[Category, List[int]]:
             buf = []
         else:
             raise AttributeError(f"failed to parse string: {s}")
-        if len(buf) > 0:
-            raise AttributeError(f"failed to parse string: {s}")
+    if len(buf) > 0:
+        raise AttributeError(f"failed to parse string: {s}")
     return res
