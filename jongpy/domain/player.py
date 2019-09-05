@@ -70,3 +70,13 @@ class Player:
         if any([i == 2 for i in available_counts]):
             res -= 1
         return res
+
+    def shanten_7pairs(self) -> int:
+        """
+        calculate shanten for seven pairs (七対子)
+        :return: int
+        """
+        res = 6
+        for counts in self.hand.values():
+            res -= len([i for i in counts if i == 2])
+        return res
