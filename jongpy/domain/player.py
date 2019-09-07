@@ -80,3 +80,79 @@ class Player:
         for counts in self.hand.values():
             res -= len([i for i in counts if i == 2])
         return res
+
+    def shanten_basic(self, hand=None, three_pairs=0, two_pairs=0, eyes=False) -> int:
+        """
+        calculate shanten for basic pattern (基本形)
+        :return: int
+        """
+        if hand is None:
+            hand = self.hand
+        # FIXME: remove alone tiles
+        # available pairs are below 4 excluding winning hand
+        if three_pairs + two_pairs > 4 and not eyes:
+            two_pairs = 4 - three_pairs
+            return 8 - three_pairs * 2 - two_pairs
+        # pong (刻子)
+        pong_shanten = 8
+        tmp_hand = hand.copy()
+        for category, counts in tmp_hand.items():
+            v = next((i for i in counts if i == 3), None)
+            if v is not None:
+                tmp_hand[category][counts.index(v)] -= 3
+                pong_shanten = self.shanten_basic(tmp_hand, three_pairs + 1, two_pairs)
+                break
+        # chow (順子)
+        chow_shanten = 8
+        tmp_hand = hand.copy()
+        for category, counts in tmp_hand.items():
+            for idx, count in enumerate(counts):
+                if (
+                    count > 0
+                    and idx + 2 < len(counts)
+                    and counts[idx + 1] > 0
+                    and counts[idx + 2] > 0
+                ):
+                    tmp_hand[category][idx] -= 1
+                    tmp_hand[category][idx + 1] -= 1
+                    tmp_hand[category][idx + 2] -= 1
+                    chow_shanten = self.shanten_basic(
+                        tmp_hand, three_pairs + 1, two_pairs
+                    )
+                    break
+            if chow_shanten < 8:
+                break
+        # pair (対子)
+        pair_shanten = 8
+        tmp_hand = hand.copy()
+        for category, counts in tmp_hand.items():
+            v = next((i for i in counts if i == 2), None)
+            if v is not None:
+                tmp_hand[category][counts.index(v)] -= 2
+                pair_shanten = self.shanten_basic(
+                    tmp_hand, three_pairs, two_pairs + 1, True
+                )
+                break
+        # serial pair (塔子)
+        spair_shanten = 8
+        tmp_hand = hand.copy()
+        for category, counts in tmp_hand.items():
+            for idx, count in enumerate(counts):
+                if count > 0 and idx + 1 < len(counts) and counts[idx + 1] > 0:
+                    tmp_hand[category][idx] -= 1
+                    tmp_hand[category][idx + 1] -= 1
+                    spair_shanten = self.shanten_basic(
+                        tmp_hand, three_pairs, two_pairs + 1
+                    )
+                    break
+            if spair_shanten < 8:
+                break
+        return min(
+            [
+                pong_shanten,
+                chow_shanten,
+                pair_shanten,
+                spair_shanten,
+                8 - three_pairs * 2 - two_pairs,
+            ]
+        )
