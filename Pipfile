@@ -8,6 +8,8 @@ flake8 = "*"
 black = "*"
 ipython = "*"
 isort = "*"
+pytest = "*"
+jongpy = {path = "."}
 
 [packages]
 colorama = "*"
@@ -18,6 +20,7 @@ python_version = "3.7"
 [scripts]
 lint = "bash -c 'flake8 . && black --check .'"
 fix = "bash -c 'isort -rc . && black .'"
+test = "pytest"
 
 [pipenv]
 allow_prereleases = true
