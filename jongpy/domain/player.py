@@ -156,3 +156,8 @@ class Player:
                 8 - three_pairs * 2 - two_pairs,
             ]
         )
+
+    def shanten(self) -> int:
+        return min(
+            [self.shanten_13orphans(), self.shanten_7pairs(), self.shanten_basic()]
+        )
